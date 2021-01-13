@@ -1,6 +1,8 @@
 const canvas = document.getElementById("jsCanvas");
 const ctx = canvas.getContext("2d");
 const colors = document.getElementsByClassName("jsColor");
+const range = document.getElementById("jsRange");
+const mode = document.getElementById("jsMode");
 
 // 픽셀 사이즈를 줘야 그릴 수 있음
 canvas.width = 700;
@@ -11,6 +13,8 @@ ctx.lineWidth = 2.5; // lineWidth는 그려지는 linewidth를 말함
 
 // mouse가 mousedown 되었을 때, ture 값 적용
 let painting = false;
+// FILL 버튼 사용 변수
+let filling = false;
 
 // mouseup && mouseleave 일 때
 function stopPainting() {
@@ -45,6 +49,22 @@ function handleColorClick(event) {
   ctx.strokeStyle = color;
 }
 
+function handleRangeChange(event) {
+  const size = event.target.value;
+  ctx.lineWidth = size;
+}
+
+// FILL 버튼을 눌렀을 때, 버튼의 글씨가 Fill <-> Paint 바뀜
+function handleModeClick() {
+  if (filling === true) {
+    filling = false;
+    mode.innerText = "Fill";
+  } else {
+    filling = true;
+    mode.innerText = "Paint";
+  }
+}
+
 // mousedown은 클릭했을 때 발생하는 이벤트
 if (canvas) {
   canvas.addEventListener("mousemove", onMouseMove);
@@ -58,3 +78,12 @@ if (canvas) {
 Array.from(colors).forEach((color) =>
   color.addEventListener("click", handleColorClick)
 );
+
+// range가 정확히 들어갔는지 확인
+if (range) {
+  range.addEventListener("input", handleRangeChange);
+}
+
+if (mode) {
+  mode.addEventListener("click", handleModeClick);
+}
